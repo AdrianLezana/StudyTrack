@@ -4,11 +4,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>StudyTrack</title>
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 
-<body>
+<header>
+    <h1>Planificador de Estudio</h1>
+    <p>Organiza tus tareas académicas.</p>
+</header>
 
-</body>
+<!-- Menú de navegación -->
+<nav>
+    <ul>
+        <li><a href="../html/index.html">Inicio</a></li>
+        <li><a href="../html/planificador.html">Planificador</a></li>
+    </ul>
+</nav>
+
+<!-- Contenido principal -->
+<main>
+
+    <!-- Formulario para agregar tareas -->
+    <section>
+        <h2>Nueva tarea</h2>
+
+        <label for="txtTarea">
+            Nombre de la tarea:
+        </label>
+
+        <input type="text" id="txtTarea" placeholder="Ej: Estudiar JavaScript">
+
+        <button id="btnAgregar">
+            Agregar tarea
+        </button>
+    </section>
+
+    <!-- Lista de tareas -->
+    <section>
+        <h2>Mis tareas</h2>
+
+        <ul id="listaTareas">
+
+            <!-- Aquí se agregan las tareas con app.js -->
+
+        </ul>
+    </section>
+
+</main>
+
+<!-- Pie de página -->
+ <footer>
+    <p>Proyecto Programación Web - StudyTrack</p>
+
+    <button id="btnTema">
+        Cambiar tema
+    </button>
+</footer>
+
+<!-- Archivo JavaScript -->
+<script src="../js/app.js"></script>
 
 </html>
