@@ -8,94 +8,97 @@
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 
-<header>
-    <h1>Planificador de Estudio</h1>
-    <p>Organiza tus tareas académicas.</p>
-</header>
+<body>
 
-<!-- Menú de navegación -->
-<nav>
-    <ul>
-        <li><a href="../html/index.html">Inicio</a></li>
-        <li><a href="../html/planificador.html">Planificador</a></li>
-    </ul>
-</nav>
+    <header>
+        <h1>Planificador de Estudio</h1>
+        <p>Organiza tus tareas académicas.</p>
+    </header>
 
-<!-- Contenido principal -->
-<main>
-
-    <!-- Formulario para agregar tareas -->
-    <section>
-        <h2>Nueva tarea</h2>
-
-        <label for="txtTarea">
-            Nombre de la tarea:
-        </label>
-
-        <input type="text" id="txtTarea" placeholder="Ej: Estudiar JavaScript">
-
-        <button id="btnAgregar">
-            Agregar tarea
-        </button>
-    </section>
-
-    <!-- Lista de tareas -->
-    <section>
-        <h2>Mis tareas</h2>
-
-        <ul id="listaTareas">
-
-            <!-- Aquí se agregan las tareas con app.js -->
-
+    <!-- Menú de navegación -->
+    <nav>
+        <ul>
+            <li><a href="../html/index.html">Inicio</a></li>
+            <li><a href="../html/planificador.html">Planificador</a></li>
         </ul>
-    </section>
+    </nav>
 
-    <!-- Calculadora de promedio -->
+    <!-- Contenido principal -->
+    <main>
 
-    <section>
+        <!-- Formulario para agregar tareas -->
+        <section>
+            <h2>Nueva tarea</h2>
 
-        <h2>Calculadora de promedio</h2>
+            <label for="txtTarea">
+                Nombre de la tarea:
+            </label>
 
-        <table>
+            <input type="text" id="txtTarea" placeholder="Ej: Estudiar JavaScript">
 
-            <thead>
-                <tr>
-                    <th>Nota</th>
-                    <th>Procentaje</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
+            <button id="btnAgregar">
+                Agregar tarea
+            </button>
+        </section>
 
-            <tbody id="tablaNotas">
+        <!-- Lista de tareas -->
+        <section>
+            <h2>Mis tareas</h2>
 
-            </tbody>
+            <ul id="listaTareas">
 
-        </table>
+                <!-- Aquí se agregan las tareas con app.js -->
 
-        <button id="btnAgregarEvaluacion">
-            Agregar evaluación
+            </ul>
+        </section>
+
+        <!-- Calculadora de promedio -->
+
+        <section>
+
+            <h2>Calculadora de promedio</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Nota</th>
+                        <th>Procentaje</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tablaNotas">
+
+                </tbody>
+
+            </table>
+
+            <button id="btnAgregarEvaluacion">
+                Agregar evaluación
+            </button>
+
+            <button id="btnCalcularPromedio">
+                Calcular promedio
+            </button>
+
+            <h3>Promedio final:
+                <span id="resultadoPromedio">0.00</span>
+            </h3>
+
+        </section>
+
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>Proyecto Programación Web - StudyTrack</p>
+
+        <button id="btnTema">
+            Cambiar tema
         </button>
-
-        <button id="btnCalcularPromedio">
-            Calcular promedio
-        </button>
-
-        <h3>Promedio final:
-            <span id="resultadoPromedio">0.00</span>
-        </h3>
-
-    </section>
-
-</main>
-
-<!-- Pie de página -->
- <footer>
-    <p>Proyecto Programación Web - StudyTrack</p>
-
-    <button id="btnTema">
-        Cambiar tema
-    </button>
-</footer>
+    </footer>
+</body>
 
 <!-- Archivo JavaScript -->
 <script src="../js/app.js"></script>
