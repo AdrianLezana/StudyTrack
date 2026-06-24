@@ -48,7 +48,7 @@ function agregarEvaluacion() {
         }
     });
 
-    tdAccion.appendChild("btnEliminar");
+    tdAccion.appendChild(btnEliminar);
 
     fila.appendChild(tdNota);
     fila.appendChild(tdProcentaje);
