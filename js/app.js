@@ -234,7 +234,7 @@ const btnIniciarPomodoro = document.getElementById("btnIniciarPomodoro");
 const btnPausarPomodoro = document.getElementById("btnPausarPomodoro");
 const btnReiniciarPomodoro = document.getElementById("btnReiniciarPomodoro");
 
-let tiempoRestante = 1500; // 25 minutos = 1500 segundos
+let tiempoRestante = 5; // 25 minutos = 1500 segundos
 
 let intervalo = null; // Variable para almacenar el intervalo del temporizador
 
@@ -260,7 +260,7 @@ function iniciarPomodoro() {
         if (tiempoRestante <= 0) {
             clearInterval(intervalo);
             intervalo = null;
-            alert("¡Tiempo terminado!");
+            alert("¡Tiempo terminado! Toma un descanso y estira tu cuerpo.");
         }
     }, 1000);
 }
@@ -277,7 +277,7 @@ function pausarPomodoro() {
 function reiniciarPomodoro() {
     clearInterval(intervalo);
     intervalo = null;
-    tiempoRestante = 1500;
+    tiempoRestante = 5;
     actualizarTemporizador();
 }
 
