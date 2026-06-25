@@ -8,7 +8,7 @@
     --texto-principal: #212529;
     --texto-secundario: #6c757d;
     --color-acento: #4f46e5; /* Azul Índigo Elegante */
-    --color-acento-hover: #4338ca;
+    --color-acento-hover: #4338ca; /* Azul Índigo que se ve al pasar sobre los elementos */
     --color-peligro: #ef4444; /* Rojo suave para eliminar */
     --color-peligro-hover: #dc2626;
     --borde: #e5e7eb;
@@ -30,6 +30,8 @@ body.dark-mode {
 /* ==========================================================================
    2. ESTILOS BASE Y RESET
    ========================================================================== */
+
+   /* Se reinician los elementos por defecto de una página antes de aplicar el estilo */
 * {
     margin: 0;
     padding: 0;
@@ -41,7 +43,7 @@ body {
     background-color: var(--bg-principal);
     color: var(--texto-principal);
     line-height: 1.6;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Permite una transición de color */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
