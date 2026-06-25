@@ -31,7 +31,6 @@ function agregarEvaluacion() {
     inputPorcentaje.type = "number";
     inputPorcentaje.min = "0";
     inputPorcentaje.max = "100";
-
     inputPorcentaje.classList.add("porcentaje");
 
     tdProcentaje.appendChild(inputPorcentaje);
@@ -73,24 +72,28 @@ function calcularPromedio() {
         // Validar nota 
         if (isNaN(nota)) {
             alert("Debe ingresar una nota válida.")
+            porcentaje.focus();
             return;
         }
 
         // Validar porcentaje
-        if (isNaN(nota)) {
-            alert("Debe ingresar un procentaje válido.")
+        if (isNaN(porcentaje)) {
+            alert("Debe ingresar un porcentaje válido.")
+            porcentaje.focus();
             return;
         }
 
         // Validar nota dentro del rango
         if (nota < 1 || nota > 7) {
             alert("Las notas deben ser entre 1.0 y 7.0")
+            nota.focus();
             return;
         }
 
         // Validar porcentaje
         if (porcentaje < 0 || porcentaje > 100) {
             alert("Los porcentajes deben estar entre 0% y 100%")
+            porcentaje.focus();
             return;
         }
 
@@ -100,6 +103,7 @@ function calcularPromedio() {
 
     if (sumaPorcentajes !== 100) {
         alert("Los porcentajes no suman 100%. Por favor, corregirlo.")
+        porcentaje.focus();
         return;
     }
 
@@ -121,6 +125,8 @@ const btnAgregar = document.getElementById("btnAgregar");
 const listaTareas = document.getElementById("listaTareas");
 
 function agregarTarea() {
+
+    // Validador de que el campo de texto no esté vacío
     const descripcion = txtTarea.value.trim();
     if (!descripcion) {
         alert("Ingresa una tarea para agregar.");
@@ -128,39 +134,51 @@ function agregarTarea() {
         return;
     }
 
+    // Crear elemento de lista para la tarea
     const item = document.createElement("li");
-    item.classList.add("tarea-item");
+    item.classList.add("tareaItem");
 
+    // Crear checkbox y label para la tarea
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.classList.add("tarea-checkbox");
+    checkbox.classList.add("tareaCheckbox");
     checkbox.id = `tarea-${Date.now()}`;
 
     const label = document.createElement("label");
     label.htmlFor = checkbox.id;
     label.textContent = descripcion;
-    label.classList.add("tarea-label");
+    label.classList.add("tareaLabel");
 
+    // Agregar evento para marcar la tarea como completada
+    checkbox.addEventListener("change", () => {
+        label.classList.toggle("completada");
+    });
+
+    // Agregar botón para eliminar la tarea
     const btnEliminarTarea = document.createElement("button");
     btnEliminarTarea.type = "button";
     btnEliminarTarea.textContent = "Eliminar";
-    btnEliminarTarea.classList.add("btn-eliminar-tarea");
+    btnEliminarTarea.classList.add("btnEliminarTarea");
     btnEliminarTarea.addEventListener("click", () => {
         listaTareas.removeChild(item);
     });
 
+    // Agregar elementos al item de la lista
     item.appendChild(checkbox);
     item.appendChild(label);
     item.appendChild(btnEliminarTarea);
     listaTareas.appendChild(item);
 
+    // Limpiar el campo de texto y enfocar nuevamente
     txtTarea.value = "";
     txtTarea.focus();
 }
 
+// Validador de que los elementos existan antes de agregar los event listeners
 if (btnAgregar && txtTarea && listaTareas) {
     btnAgregar.addEventListener("click", agregarTarea);
 
+    // Permitir agregar tarea al presionar Enter en el campo de texto
     txtTarea.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
             event.preventDefault();
