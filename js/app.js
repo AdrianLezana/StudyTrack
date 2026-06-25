@@ -273,3 +273,31 @@ function mostrarConsejoAleatorio() {
 if (btnConsejo && pConsejo) {
     btnConsejo.addEventListener("click", mostrarConsejoAleatorio);
 }
+
+// Modo oscuro
+
+const btnTema = document.getElementById("btnTema");
+
+// Función para alternar la clase en el body
+function alternarTema() {
+    // .classList.toggle() añade la clase si no existe, o la quita si ya existe
+    document.body.classList.toggle("dark-mode");
+    
+    // Guardar la preferencia en el navegador del usuario (LocalStorage)
+    if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("tema", "oscuro");
+    } else {
+        localStorage.setItem("tema", "claro");
+    }
+}
+
+// 3. Validador de existencia y recuperación de preferencia al cargar la página
+if (btnTema) {
+    btnTema.addEventListener("click", alternarTema);
+    
+    // Al cargar la página, verificamos si el usuario ya había elegido el modo oscuro antes
+    const temaGuardado = localStorage.getItem("tema");
+    if (temaGuardado === "oscuro") {
+        document.body.classList.add("dark-mode");
+    }
+}
