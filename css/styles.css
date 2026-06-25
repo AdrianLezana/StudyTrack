@@ -1,5 +1,5 @@
 /* ==========================================================================
-   1. VARIABLES DE COLOR (Paleta Minimalista Elegante)
+   1. VARIABLES DE COLOR
    ========================================================================== */
 :root {
     /* Modo Claro */
@@ -50,7 +50,7 @@ body {
 }
 
 /* ==========================================================================
-   3. ESTRUCTURA SEMÁNTICA GENERAL (Layout)
+   3. ESTRUCTURA SEMÁNTICA GENERAL
    ========================================================================== */
 header {
     background-color: var(--bg-tarjeta);
@@ -267,7 +267,7 @@ th {
 }
 
 #temporizador {
-    font-size: 3rem; /* Número grande y legible */
+    font-size: 3rem; /* Tamaño de los números del temporizador */
     font-weight: 700;
     color: var(--color-acento);
     font-variant-numeric: tabular-nums; /* Evita que el ancho cambie según el número */
@@ -281,7 +281,7 @@ body.dark-mode #btnReiniciarPomodoro:hover {
 }
 
 /* ==========================================================================
-   6. PIE DE PÁGINA (Footer)
+   6. PIE DE PÁGINA
    ========================================================================== */
 footer {
     background-color: var(--bg-tarjeta);
