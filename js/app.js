@@ -5,48 +5,66 @@ const btnCalcularPromedio = document.getElementById("btnCalcularPromedio");
 const tablaNotas = document.getElementById("tablaNotas");
 const resultadoPromedio = document.getElementById("resultadoPromedio");
 
-function agregarEvaluacion() {
-    const fila = document.createElement("tr"); // Crea table row o fila
+// Estado: Cargar notas previas o array vacío
+let notasGuardadas = JSON.parse(localStorage.getItem("evaluaciones")) || [];
+
+function guardarNotasEnStorage() {
+    const notasInputs = document.getElementsByClassName("nota");
+    const porcentajesInputs = document.getElementsByClassName("porcentaje");
+    
+    const datosAGuardar = [];
+    
+    for (let i = 0; i < notasInputs.length; i++) {
+        datosAGuardar.push({
+            nota: notasInputs[i].value,
+            porcentaje: porcentajesInputs[i].value
+        });
+    }
+    localStorage.setItem("evaluaciones", JSON.stringify(datosAGuardar));
+}
+
+function agregarEvaluacion(valorNota = "", valorPorcentaje = "") {
+    const fila = document.createElement("tr");
 
     // Nota
-    const tdNota = document.createElement("td"); // Crea table data
-
-    const inputNota = document.createElement("input"); // Crea un elemento de tipo input
-    inputNota.type = "number"; // El input es de tipo number (números)
-    inputNota.min = "1"; // El valor mínimo es 1
-    inputNota.max = "7"; // El valor máximo es 7
-    inputNota.step = "0.1"; // El salto numérico es de 0.1
-
-    inputNota.classList.add("nota"); // La clase del input es "nota"
-
-    tdNota.appendChild(inputNota); // Agrega un table data con lo especificado anteriormente
+    const tdNota = document.createElement("td");
+    const inputNota = document.createElement("input");
+    inputNota.type = "number";
+    inputNota.min = "1";
+    inputNota.max = "7";
+    inputNota.step = "0.1";
+    inputNota.classList.add("nota");
+    inputNota.value = valorNota; // Carga el valor si existe
+    
+    // Escucha cambios para guardar automáticamente
+    inputNota.addEventListener("input", guardarNotasEnStorage);
+    tdNota.appendChild(inputNota);
 
     // Porcentaje
     const tdProcentaje = document.createElement("td");
-
-    // Crea un input para el porcentaje
     const inputPorcentaje = document.createElement("input");
     inputPorcentaje.type = "number";
     inputPorcentaje.min = "0";
     inputPorcentaje.max = "100";
     inputPorcentaje.classList.add("porcentaje");
-
+    inputPorcentaje.value = valorPorcentaje; // Carga el valor si existe
+    
+    // Escucha cambios para guardar automáticamente
+    inputPorcentaje.addEventListener("input", guardarNotasEnStorage);
     tdProcentaje.appendChild(inputPorcentaje);
 
     // Botón eliminar
     const tdAccion = document.createElement("td");
-
     const btnEliminar = document.createElement("button");
     btnEliminar.textContent = "Eliminar";
 
-    // Agrega un aviso al botón eliminar para eliminar la fila correspondiente
     btnEliminar.addEventListener("click", () => {
         if (confirm("¿Eliminar evaluación?")) {
             tablaNotas.removeChild(fila);
+            guardarNotasEnStorage(); // Actualiza el storage al eliminar
         }
     });
 
-    // Agrega el botón eliminar a la celda de acción y la fila a la tabla
     tdAccion.appendChild(btnEliminar);
     fila.appendChild(tdNota);
     fila.appendChild(tdProcentaje);
@@ -55,9 +73,7 @@ function agregarEvaluacion() {
     tablaNotas.appendChild(fila);
 }
 
-// Función para calcular el promedio
 function calcularPromedio() {
-
     const notas = document.getElementsByClassName("nota");
     const porcentajes = document.getElementsByClassName("porcentaje");
 
@@ -65,20 +81,17 @@ function calcularPromedio() {
     let sumaPorcentajes = 0;
 
     for (let i = 0; i < notas.length; i++) {
-
         const nota = parseFloat(notas[i].value) || 0;
         const porcentaje = parseFloat(porcentajes[i].value) || 0;
 
-        // Validar nota dentro del rango
         if (nota < 1 || nota > 7) {
-            alert("Las notas deben ser entre 1.0 y 7.0")
+            alert("Las notas deben ser entre 1.0 y 7.0");
             notas[i].focus();
             return;
         }
 
-        // Validar porcentaje
         if (porcentaje < 0 || porcentaje > 100) {
-            alert("Los porcentajes deben estar entre 0% y 100%")
+            alert("Los porcentajes deben estar entre 0% y 100%");
             porcentajes[i].focus();
             return;
         }
@@ -87,25 +100,32 @@ function calcularPromedio() {
         sumaPorcentajes += porcentaje;
     }
 
-    // Validar que la suma de los porcentajes sea 100
     if (sumaPorcentajes !== 100) {
-        alert("Los porcentajes no suman 100%. Por favor, corregirlo.")
+        alert("Los porcentajes no suman 100%. Por favor, corregirlo.");
         if (porcentajes.length > 0) {
-            porcentajes[0].focus(); // Enfoca el primer campo de porcentaje para que el usuario pueda corregirlo
+            porcentajes[0].focus();
         }
         return;
     }
 
-    const promedio = sumaPonderada / 100; // Dividimos por 100 porque los porcentajes suman 100
-
-    resultadoPromedio.textContent = promedio.toFixed(2); // Muestra el promedio con dos decimales
+    const promedio = sumaPonderada / 100;
+    resultadoPromedio.textContent = promedio.toFixed(2);
 }
 
-// Validador de que los elementos existan antes de agregar los event listeners
+// Inicialización y carga de la calculadora
 if (btnAgregarEvaluacion) {
-    btnAgregarEvaluacion.addEventListener("click", agregarEvaluacion);
+    btnAgregarEvaluacion.addEventListener("click", () => agregarEvaluacion());
     btnCalcularPromedio.addEventListener("click", calcularPromedio);
-    agregarEvaluacion();
+    
+    // Si había notas guardadas, las muestra todas
+    if (notasGuardadas.length > 0) {
+        notasGuardadas.forEach(evaluacion => {
+            agregarEvaluacion(evaluacion.nota, evaluacion.porcentaje);
+        });
+    } else {
+        // Si la app está limpia, agrega una fila vacía por defecto para empezar
+        agregarEvaluacion();
+    }
 }
 
 // Planificador de tareas
@@ -114,10 +134,61 @@ const txtTarea = document.getElementById("txtTarea");
 const btnAgregar = document.getElementById("btnAgregar");
 const listaTareas = document.getElementById("listaTareas");
 
-// Función para agregar una tarea a la lista
-function agregarTarea() {
+// Cargar tareas previas o iniciar array vacío
+let tareasGuardadas = JSON.parse(localStorage.getItem("tareas")) || [];
 
-    // Validador de que el campo de texto no esté vacío
+// Función para guardar el estado actual de las tareas en LocalStorage
+function guardarTareasEnStorage() {
+    localStorage.setItem("tareas", JSON.stringify(tareasGuardadas));
+}
+
+// Función para renderizar (dibujar) una tarea en el HTML
+function renderizarTarea(tareaObj) {
+    const item = document.createElement("li");
+    item.classList.add("tareaItem");
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.classList.add("tareaCheckbox");
+    checkbox.id = `tarea-${tareaObj.id}`;
+    checkbox.checked = tareaObj.completada; // Mantiene el check si estaba completada
+
+    const label = document.createElement("label");
+    label.htmlFor = checkbox.id;
+    label.textContent = tareaObj.descripcion;
+    label.classList.add("tareaLabel");
+    if (tareaObj.completada) {
+        label.classList.add("completada");
+    }
+
+    // Evento para cambiar estado completado
+    checkbox.addEventListener("change", () => {
+        label.classList.toggle("completada");
+        // Buscar la tarea en nuestro array y actualizar su propiedad
+        tareaObj.completada = checkbox.checked;
+        guardarTareasEnStorage();
+    });
+
+    const btnEliminarTarea = document.createElement("button");
+    btnEliminarTarea.type = "button";
+    btnEliminarTarea.textContent = "Eliminar";
+    btnEliminarTarea.classList.add("btnEliminarTarea");
+    
+    btnEliminarTarea.addEventListener("click", () => {
+        // Filtrar el array para sacar la tarea eliminada
+        tareasGuardadas = tareasGuardadas.filter(t => t.id !== tareaObj.id);
+        guardarTareasEnStorage();
+        listaTareas.removeChild(item);
+    });
+
+    item.appendChild(checkbox);
+    item.appendChild(label);
+    item.appendChild(btnEliminarTarea);
+    listaTareas.appendChild(item);
+}
+
+// Función que se ejecuta al presionar el botón "Agregar"
+function agregarTarea() {
     const descripcion = txtTarea.value.trim();
     if (!descripcion) {
         alert("Ingresa una tarea para agregar.");
@@ -125,58 +196,37 @@ function agregarTarea() {
         return;
     }
 
-    // Crear elemento de lista para la tarea
-    const item = document.createElement("li");
-    item.classList.add("tareaItem");
+    // Crea el objeto de la nueva tarea
+    const nuevaTarea = {
+        id: Date.now(), // ID único basado en el tiempo milisegundo
+        descripcion: descripcion,
+        completada: false
+    };
 
-    // Crear checkbox y label para la tarea
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.classList.add("tareaCheckbox");
-    checkbox.id = `tarea-${Date.now()}`;
+    // Actualizamos estado y storage
+    tareasGuardadas.push(nuevaTarea);
+    guardarTareasEnStorage();
 
-    // Crear label para la tarea
-    const label = document.createElement("label");
-    label.htmlFor = checkbox.id;
-    label.textContent = descripcion;
-    label.classList.add("tareaLabel");
+    // Mostramos en pantalla
+    renderizarTarea(nuevaTarea);
 
-    // Agregar evento para marcar la tarea como completada
-    checkbox.addEventListener("change", () => {
-        label.classList.toggle("completada");
-    });
-
-    // Agregar botón para eliminar la tarea
-    const btnEliminarTarea = document.createElement("button");
-    btnEliminarTarea.type = "button";
-    btnEliminarTarea.textContent = "Eliminar";
-    btnEliminarTarea.classList.add("btnEliminarTarea");
-    btnEliminarTarea.addEventListener("click", () => {
-        listaTareas.removeChild(item);
-    });
-
-    // Agregar elementos al item de la lista
-    item.appendChild(checkbox);
-    item.appendChild(label);
-    item.appendChild(btnEliminarTarea);
-    listaTareas.appendChild(item);
-
-    // Limpiar el campo de texto y enfocar nuevamente
     txtTarea.value = "";
     txtTarea.focus();
 }
 
-// Validador de que los elementos existan antes de agregar los event listeners
+// Cargar las tareas al iniciar la página
 if (btnAgregar && txtTarea && listaTareas) {
     btnAgregar.addEventListener("click", agregarTarea);
 
-    // Permitir agregar tarea al presionar Enter en el campo de texto
     txtTarea.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
             event.preventDefault();
             agregarTarea();
         }
     });
+
+    // Dibujar todas las tareas que estaban guardadas
+    tareasGuardadas.forEach(tarea => renderizarTarea(tarea));
 }
 
 const temporizador = document.getElementById("temporizador");
