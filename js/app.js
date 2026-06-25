@@ -5,9 +5,6 @@ const btnCalcularPromedio = document.getElementById("btnCalcularPromedio");
 const tablaNotas = document.getElementById("tablaNotas");
 const resultadoPromedio = document.getElementById("resultadoPromedio");
 
-//btnAgregarEvaluacion.addEventListener("click", agregarEvaluacion);
-//btnCalcularPromedio.addEventListener("click", calcularPromedio);
-
 function agregarEvaluacion() {
     const fila = document.createElement("tr"); // Crea table row o fila
 
@@ -27,6 +24,7 @@ function agregarEvaluacion() {
     // Porcentaje
     const tdProcentaje = document.createElement("td");
 
+    // Crea un input para el porcentaje
     const inputPorcentaje = document.createElement("input");
     inputPorcentaje.type = "number";
     inputPorcentaje.min = "0";
@@ -41,14 +39,15 @@ function agregarEvaluacion() {
     const btnEliminar = document.createElement("button");
     btnEliminar.textContent = "Eliminar";
 
+    // Agrega un aviso al botón eliminar para eliminar la fila correspondiente
     btnEliminar.addEventListener("click", () => {
         if (confirm("¿Eliminar evaluación?")) {
             tablaNotas.removeChild(fila);
         }
     });
 
+    // Agrega el botón eliminar a la celda de acción y la fila a la tabla
     tdAccion.appendChild(btnEliminar);
-
     fila.appendChild(tdNota);
     fila.appendChild(tdProcentaje);
     fila.appendChild(tdAccion);
@@ -56,6 +55,7 @@ function agregarEvaluacion() {
     tablaNotas.appendChild(fila);
 }
 
+// Función para calcular el promedio
 function calcularPromedio() {
 
     const notas = document.getElementsByClassName("nota");
@@ -101,17 +101,19 @@ function calcularPromedio() {
         sumaPorcentajes += porcentaje;
     }
 
+    // Validar que la suma de los porcentajes sea 100
     if (sumaPorcentajes !== 100) {
         alert("Los porcentajes no suman 100%. Por favor, corregirlo.")
         porcentaje.focus();
         return;
     }
 
-    const promedio = sumaPonderada / 100;
+    const promedio = sumaPonderada / 100; // Dividimos por 100 porque los porcentajes suman 100
 
-    resultadoPromedio.textContent = promedio.toFixed(2);
+    resultadoPromedio.textContent = promedio.toFixed(2); // Muestra el promedio con dos decimales
 }
 
+// Validador de que los elementos existan antes de agregar los event listeners
 if (btnAgregarEvaluacion) {
     btnAgregarEvaluacion.addEventListener("click", agregarEvaluacion);
     btnCalcularPromedio.addEventListener("click", calcularPromedio);
@@ -124,6 +126,7 @@ const txtTarea = document.getElementById("txtTarea");
 const btnAgregar = document.getElementById("btnAgregar");
 const listaTareas = document.getElementById("listaTareas");
 
+// Función para agregar una tarea a la lista
 function agregarTarea() {
 
     // Validador de que el campo de texto no esté vacío
@@ -144,6 +147,7 @@ function agregarTarea() {
     checkbox.classList.add("tareaCheckbox");
     checkbox.id = `tarea-${Date.now()}`;
 
+    // Crear label para la tarea
     const label = document.createElement("label");
     label.htmlFor = checkbox.id;
     label.textContent = descripcion;
@@ -187,3 +191,67 @@ if (btnAgregar && txtTarea && listaTareas) {
     });
 }
 
+const temporizador = document.getElementById("temporizador");
+const btnIniciarPomodoro = document.getElementById("btnIniciarPomodoro");
+const btnPausarPomodoro = document.getElementById("btnPausarPomodoro");
+const btnReiniciarPomodoro = document.getElementById("btnReiniciarPomodoro");
+
+let tiempoRestante = 1500; // 25 minutos = 1500 segundos
+
+let intervalo = null; // Variable para almacenar el intervalo del temporizador
+
+// Función para actualizar el temporizador en la interfaz
+function actualizarTemporizador() {
+    const minutos = Math.floor(tiempoRestante / 60);
+    const segundos = tiempoRestante % 60;
+    const TiempoFormateado = `${minutos.toString().padStart(2, "0")}:${segundos.toString().padStart(2, "0")}`;
+    temporizador.textContent = TiempoFormateado;
+}
+
+// Función para iniciar el temporizador
+function iniciarPomodoro() {
+    if (intervalo !== null) {
+        return; // Evita iniciar múltiples intervalos   
+    }
+
+    // Inicia el intervalo que decrementa el tiempo restante cada segundo
+    intervalo = setInterval(() => {
+        tiempoRestante--;
+        actualizarTemporizador();
+
+        if (tiempoRestante <= 0) {
+            clearInterval(intervalo);
+            intervalo = null;
+            alert("¡Tiempo terminado!");
+        }
+    }, 1000);
+}
+
+// Función para pausar el temporizador
+function pausarPomodoro() {
+    if (intervalo !== null) {
+        clearInterval(intervalo);
+        intervalo = null;
+    }
+}
+
+// Función para reiniciar el temporizador
+function reiniciarPomodoro() {
+    clearInterval(intervalo);
+    intervalo = null;
+    tiempoRestante = 1500;
+    actualizarTemporizador();
+}
+
+// Validador de que los elementos existan antes de agregar los event listeners
+if (
+    btnIniciarPomodoro &&
+    btnPausarPomodoro &&
+    btnReiniciarPomodoro &&
+    temporizador
+) {
+    btnIniciarPomodoro.addEventListener("click", iniciarPomodoro);
+    btnPausarPomodoro.addEventListener("click", pausarPomodoro);
+    btnReiniciarPomodoro.addEventListener("click", reiniciarPomodoro);
+    actualizarTemporizador(); // Inicializa el temporizador en la interfaz
+}
