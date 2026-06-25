@@ -243,3 +243,33 @@ if (
     btnReiniciarPomodoro.addEventListener("click", reiniciarPomodoro);
     actualizarTemporizador(); // Inicializa el temporizador en la interfaz
 }
+
+// Consejo del día
+
+const pConsejo = document.getElementById("consejo");
+const btnConsejo = document.getElementById("btnConsejo");
+
+// Lista con los consejos de estudio
+const consejos = [
+    "Prueba la técnica Feynman: explica el tema que estás estudiando con tus propias palabras como si le enseñaras a un niño.",
+    "Toma descansos activos. Camina o estírate durante tus pausas de Pomodoro para reactivar tu circulación.",
+    "Estudia primero la materia más difícil o compleja cuando tu energía y concentración estén al máximo.",
+    "Elimina las distracciones digitales: pon tu teléfono en otra habitación o usa aplicaciones que bloqueen redes sociales.",
+    "El cerebro recuerda mejor lo que intenta evocar activamente. Ponte mini-baches o hazte preguntas a ti mismo en lugar de solo releer.",
+    "Mantén tu espacio de estudio limpio y ordenado; un entorno caótico distrae la mente de forma inconsciente."
+];
+
+// Función para seleccionar y mostrar un consejo aleatorio
+function mostrarConsejoAleatorio() {
+    // Math.random() genera un número entre 0 y 0.999...
+    // Lo multiplicamos por el largo del array y Math.floor() lo redondea hacia abajo
+    const indiceAleatorio = Math.floor(Math.random() * consejos.length);
+    
+    // Cambiamos el texto del párrafo en el HTML
+    pConsejo.textContent = consejos[indiceAleatorio];
+}
+
+// Se asigna el evento si los elementos están en la página actual
+if (btnConsejo && pConsejo) {
+    btnConsejo.addEventListener("click", mostrarConsejoAleatorio);
+}
