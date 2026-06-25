@@ -70,6 +70,30 @@ function calcularPromedio() {
         const nota = parseFloat(notas[i].value) || 0;
         const porcentaje = parseFloat(porcentajes[i].value) || 0;
 
+        // Validar nota 
+        if (isNaN(nota)) {
+            alert("Debe ingresar una nota válida.")
+            return;
+        }
+
+        // Validar porcentaje
+        if (isNaN(nota)) {
+            alert("Debe ingresar un procentaje válido.")
+            return;
+        }
+
+        // Validar nota dentro del rango
+        if (nota < 1 || nota > 7) {
+            alert("Las notas deben ser entre 1.0 y 7.0")
+            return;
+        }
+
+        // Validar porcentaje
+        if (porcentaje < 0 || porcentaje > 100) {
+            alert("Los porcentajes deben estar entre 0% y 100%")
+            return;
+        }
+
         sumaPonderada += nota * porcentaje;
         sumaPorcentajes += porcentaje;
     }
