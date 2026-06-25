@@ -5,9 +5,10 @@ const btnCalcularPromedio = document.getElementById("btnCalcularPromedio");
 const tablaNotas = document.getElementById("tablaNotas");
 const resultadoPromedio = document.getElementById("resultadoPromedio");
 
-// Estado: Cargar notas previas o array vacío
+// Cargar notas previas o array vacío
 let notasGuardadas = JSON.parse(localStorage.getItem("evaluaciones")) || [];
 
+// Funcion que nos permite guardar información en LocalStorage
 function guardarNotasEnStorage() {
     const notasInputs = document.getElementsByClassName("nota");
     const porcentajesInputs = document.getElementsByClassName("porcentaje");
@@ -23,7 +24,8 @@ function guardarNotasEnStorage() {
     localStorage.setItem("evaluaciones", JSON.stringify(datosAGuardar));
 }
 
-function agregarEvaluacion(valorNota = "", valorPorcentaje = "") {
+// Función para agregar una nueva evaluación a la tabla
+function agregarEvaluacion(valorNota = "", valorPorcentaje = "") { // Permite pasar valores por defecto
     const fila = document.createElement("tr");
 
     // Nota
@@ -58,6 +60,7 @@ function agregarEvaluacion(valorNota = "", valorPorcentaje = "") {
     const btnEliminar = document.createElement("button");
     btnEliminar.textContent = "Eliminar";
 
+    // Evento del botón eliminar para confirmar
     btnEliminar.addEventListener("click", () => {
         if (confirm("¿Eliminar evaluación?")) {
             tablaNotas.removeChild(fila);
@@ -80,6 +83,7 @@ function calcularPromedio() {
     let sumaPonderada = 0;
     let sumaPorcentajes = 0;
 
+    // Validación de notas y porcentajes
     for (let i = 0; i < notas.length; i++) {
         const nota = parseFloat(notas[i].value) || 0;
         const porcentaje = parseFloat(porcentajes[i].value) || 0;
@@ -100,6 +104,7 @@ function calcularPromedio() {
         sumaPorcentajes += porcentaje;
     }
 
+    // Si los porcentajes no suman 100, va a mostrar un mensaje de error.
     if (sumaPorcentajes !== 100) {
         alert("Los porcentajes no suman 100%. Por favor, corregirlo.");
         if (porcentajes.length > 0) {
@@ -150,13 +155,16 @@ function renderizarTarea(tareaObj) {
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.classList.add("tareaCheckbox");
-    checkbox.id = `tarea-${tareaObj.id}`;
+    checkbox.id = `tarea-${tareaObj.id}`; // Asignar un ID único basado en el timestamp, es decir, el momento en que se creó
     checkbox.checked = tareaObj.completada; // Mantiene el check si estaba completada
 
+    // Crear la etiqueta para la tarea
     const label = document.createElement("label");
     label.htmlFor = checkbox.id;
     label.textContent = tareaObj.descripcion;
     label.classList.add("tareaLabel");
+    
+    // Si la tarea estaba completada, le agregamos la clase correspondiente
     if (tareaObj.completada) {
         label.classList.add("completada");
     }
@@ -169,18 +177,20 @@ function renderizarTarea(tareaObj) {
         guardarTareasEnStorage();
     });
 
+    // Botón eliminar
     const btnEliminarTarea = document.createElement("button");
     btnEliminarTarea.type = "button";
     btnEliminarTarea.textContent = "Eliminar";
     btnEliminarTarea.classList.add("btnEliminarTarea");
     
-    btnEliminarTarea.addEventListener("click", () => {
-        // Filtrar el array para sacar la tarea eliminada
-        tareasGuardadas = tareasGuardadas.filter(t => t.id !== tareaObj.id);
+    // Evento para eliminar la tarea
+    btnEliminarTarea.addEventListener("click", () => {        
+        tareasGuardadas = tareasGuardadas.filter(t => t.id !== tareaObj.id); // Filtrar el array para sacar la tarea eliminada
         guardarTareasEnStorage();
         listaTareas.removeChild(item);
     });
 
+    // Agregar los elementos al item de la lista
     item.appendChild(checkbox);
     item.appendChild(label);
     item.appendChild(btnEliminarTarea);
@@ -225,7 +235,7 @@ if (btnAgregar && txtTarea && listaTareas) {
         }
     });
 
-    // Dibujar todas las tareas que estaban guardadas
+    // Muestra todas las tareas que estaban guardadas
     tareasGuardadas.forEach(tarea => renderizarTarea(tarea));
 }
 
@@ -240,9 +250,9 @@ let intervalo = null; // Variable para almacenar el intervalo del temporizador
 
 // Función para actualizar el temporizador en la interfaz
 function actualizarTemporizador() {
-    const minutos = Math.floor(tiempoRestante / 60);
-    const segundos = tiempoRestante % 60;
-    const TiempoFormateado = `${minutos.toString().padStart(2, "0")}:${segundos.toString().padStart(2, "0")}`;
+    const minutos = Math.floor(tiempoRestante / 60); // Obtenemos los minutos restantes
+    const segundos = tiempoRestante % 60; // Obtenemos los segundos restantes después de calcular los minutos
+    const TiempoFormateado = `${minutos.toString().padStart(2, "0")}:${segundos.toString().padStart(2, "0")}`; // Formateamos el tiempo para que siempre tenga dos dígitos
     temporizador.textContent = TiempoFormateado;
 }
 
@@ -257,12 +267,13 @@ function iniciarPomodoro() {
         tiempoRestante--;
         actualizarTemporizador();
 
+        // Cuando el tiempo llega a cero, se detiene el temporizador y se muestra un mensaje de descanso
         if (tiempoRestante <= 0) {
             clearInterval(intervalo);
             intervalo = null;
             alert("¡Tiempo terminado! Toma un descanso y estira tu cuerpo.");
         }
-    }, 1000);
+    }, 1000); // Se ejecuta cada 1000 milisegundos (1 segundo)
 }
 
 // Función para pausar el temporizador
@@ -311,7 +322,7 @@ const consejos = [
 
 // Función para seleccionar y mostrar un consejo aleatorio
 function mostrarConsejoAleatorio() {
-    // Math.random() genera un número entre 0 y 0.999...
+    // Math.random() genera un número entre 0 y 0.999
     // Lo multiplicamos por el largo del array y Math.floor() lo redondea hacia abajo
     const indiceAleatorio = Math.floor(Math.random() * consejos.length);
     
@@ -330,8 +341,8 @@ const btnTema = document.getElementById("btnTema");
 
 // Función para alternar la clase en el body
 function alternarTema() {
-    // .classList.toggle() añade la clase si no existe, o la quita si ya existe
-    document.body.classList.toggle("dark-mode");
+    
+    document.body.classList.toggle("dark-mode"); // .classList.toggle() añade la clase si no existe, o la quita si ya existe
     
     // Guardar la preferencia en el navegador del usuario (LocalStorage)
     if (document.body.classList.contains("dark-mode")) {
