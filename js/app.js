@@ -113,3 +113,59 @@ if (btnAgregarEvaluacion) {
     btnCalcularPromedio.addEventListener("click", calcularPromedio);
     agregarEvaluacion();
 }
+
+// Planificador de tareas
+
+const txtTarea = document.getElementById("txtTarea");
+const btnAgregar = document.getElementById("btnAgregar");
+const listaTareas = document.getElementById("listaTareas");
+
+function agregarTarea() {
+    const descripcion = txtTarea.value.trim();
+    if (!descripcion) {
+        alert("Ingresa una tarea para agregar.");
+        txtTarea.focus();
+        return;
+    }
+
+    const item = document.createElement("li");
+    item.classList.add("tarea-item");
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.classList.add("tarea-checkbox");
+    checkbox.id = `tarea-${Date.now()}`;
+
+    const label = document.createElement("label");
+    label.htmlFor = checkbox.id;
+    label.textContent = descripcion;
+    label.classList.add("tarea-label");
+
+    const btnEliminarTarea = document.createElement("button");
+    btnEliminarTarea.type = "button";
+    btnEliminarTarea.textContent = "Eliminar";
+    btnEliminarTarea.classList.add("btn-eliminar-tarea");
+    btnEliminarTarea.addEventListener("click", () => {
+        listaTareas.removeChild(item);
+    });
+
+    item.appendChild(checkbox);
+    item.appendChild(label);
+    item.appendChild(btnEliminarTarea);
+    listaTareas.appendChild(item);
+
+    txtTarea.value = "";
+    txtTarea.focus();
+}
+
+if (btnAgregar && txtTarea && listaTareas) {
+    btnAgregar.addEventListener("click", agregarTarea);
+
+    txtTarea.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            agregarTarea();
+        }
+    });
+}
+
