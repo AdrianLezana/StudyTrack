@@ -69,31 +69,17 @@ function calcularPromedio() {
         const nota = parseFloat(notas[i].value) || 0;
         const porcentaje = parseFloat(porcentajes[i].value) || 0;
 
-        // Validar nota 
-        if (isNaN(nota)) {
-            alert("Debe ingresar una nota válida.")
-            porcentaje.focus();
-            return;
-        }
-
-        // Validar porcentaje
-        if (isNaN(porcentaje)) {
-            alert("Debe ingresar un porcentaje válido.")
-            porcentaje.focus();
-            return;
-        }
-
         // Validar nota dentro del rango
         if (nota < 1 || nota > 7) {
             alert("Las notas deben ser entre 1.0 y 7.0")
-            nota.focus();
+            notas[i].focus();
             return;
         }
 
         // Validar porcentaje
         if (porcentaje < 0 || porcentaje > 100) {
             alert("Los porcentajes deben estar entre 0% y 100%")
-            porcentaje.focus();
+            porcentajes[i].focus();
             return;
         }
 
@@ -104,7 +90,9 @@ function calcularPromedio() {
     // Validar que la suma de los porcentajes sea 100
     if (sumaPorcentajes !== 100) {
         alert("Los porcentajes no suman 100%. Por favor, corregirlo.")
-        porcentaje.focus();
+        if (porcentajes.length > 0) {
+            porcentajes[0].focus(); // Enfoca el primer campo de porcentaje para que el usuario pueda corregirlo
+        }
         return;
     }
 
